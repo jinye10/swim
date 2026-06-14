@@ -60,6 +60,16 @@ const formattedDrills: SwimDrill[] = (data || []).map((row: any) => ({
 }));
 
 setDrills(formattedDrills);
+      } catch (e) {
+  console.error('Failed to fetch drills:', e);
+} finally {
+  setLoading(false);
+}
+};
+
+useEffect(() => {
+  fetchDrills();
+}, []);
 
   // 필터링 적용
   const filteredDrills = drills.filter((drill) => {
