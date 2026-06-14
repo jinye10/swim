@@ -98,6 +98,14 @@ export default function Header() {
                   영상 공유판
                 </Link>
               )}
+              {user && (
+  <Link
+    href="/profile"
+    className="font-medium text-slate-300 hover:text-cyan-400 transition-colors"
+  >
+    마이페이지
+  </Link>
+)}
               {isAdmin && (
                 <Link
                   href="/admin"
