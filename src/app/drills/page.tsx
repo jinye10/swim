@@ -35,34 +35,31 @@ export default function DrillsPage() {
         .select('*')
         .order('id', { ascending: true });
 
-      if (error) throw error;
-      
-      // DB 스키마 카멜케이스 매핑
-      const formattedDrills: SwimDrill[] = (data || []).map((row: any) => ({
-        id: row.id,
-        name: row.name,
-        description: row.description,
-        stroke: row.stroke as StrokeType,
-        focus: row.focus as FocusType,
-        phase: row.phase as any,
-        difficulty: row.difficulty as any,
-        intensity: row.intensity,
-        estimatedMinutesPer100m: Number(row.estimated_minutes_per_100m || row.estimatedMinutesPer100m),
-        defaultDistance: row.default_distance || row.defaultDistance,
-        youtubeUrl: row.youtube_url || row.youtubeUrl, // 추가 필드
-      }));
+if (error) throw error;
 
-      setDrills(formattedDrills);
-    } catch (e) {
-      console.error('Failed to fetch drills:', e);
-    } finally {
-      setLoading(false);
-    }
-  };
+console.log('Supabase data:', data);
+console.log('Supabase error:', error);
 
-  useEffect(() => {
-    fetchDrills();
-  }, []);
+// DB 스키마 카멜케이스 매핑
+const formattedDrills: SwimDrill[] = (data || []).map((row: any) => ({
+  id: row.id,
+  name: row.name,
+  description: row.description,
+  stroke: row.stroke as StrokeType,
+  focus: row.focus as FocusType,
+  phase: row.phase as any,
+  difficulty: row.difficulty as any,
+  intensity: row.intensity,
+  estimatedMinutesPer100m: Number(
+    row.estimated_minutes_per_100m || row.estimatedMinutesPer100m
+  ),
+  defaultDistance:
+    row.default_distance || row.defaultDistance,
+  youtubeUrl:
+    row.youtube_url || row.youtubeUrl,
+}));
+
+setDrills(formattedDrills);
 
   // 필터링 적용
   const filteredDrills = drills.filter((drill) => {
