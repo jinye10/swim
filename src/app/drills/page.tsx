@@ -34,6 +34,11 @@ export default function DrillsPage() {
         .from('drills')
         .select('*')
         .order('id', { ascending: true });
+      
+      console.log('DATA:', data);
+console.log('ERROR:', error);
+console.log('COUNT:', data?.length);
+console.log('FIRST:', data?.[0]);
 
 if (error) throw error;
 
