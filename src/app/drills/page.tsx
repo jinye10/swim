@@ -33,8 +33,9 @@ export default function DrillsPage() {
       const { data, error } = await supabase
         .from('drills')
         .select('*')
-        .order('id', { ascending: true });
+       .order('id', { ascending: true });
       
+      console.log('RAW DATA:', JSON.stringify(data));
       console.log('DATA:', data);
 console.log('ERROR:', error);
 console.log('COUNT:', data?.length);
