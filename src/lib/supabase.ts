@@ -262,3 +262,6 @@ const mockSupabase = {
 
 // 최종 익스포트
 export const supabase = isRealSupabase ? realSupabase : mockSupabase;
+
+console.log('isRealSupabase:', isRealSupabase);
+console.log('supabaseUrl:', supabaseUrl);
