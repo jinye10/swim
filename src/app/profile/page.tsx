@@ -5,72 +5,67 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<any>(null);
+const [user, setUser] = useState<any>(null);
 
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+const [totalSessions, setTotalSessions] = useState(0);
+const [totalMinutes, setTotalMinutes] = useState(0);
+const [averageSatisfaction, setAverageSatisfaction] = useState(0);
 
-      setUser(user);
-    };
+useEffect(() => {
+const loadProfile = async () => {
+const {
+data: { user },
+} = await supabase.auth.getUser();
 
-    getUser();
-  }, []);
+```
+  setUser(user);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = '/';
-  };
+  if (!user) return;
 
-  return (
-    <div className="max-w-3xl mx-auto py-12 px-6">
-      <h1 className="text-3xl font-bold mb-8 text-white">
-        마이페이지
-      </h1>
+  const { data: logs, error } = await supabase
+    .from('feedback_logs')
+    .select('*')
+    .eq('user_id', user.id);
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+  if (!error && logs) {
+    setTotalSessions(logs.length);
 
-        <div>
-          <p className="text-slate-400 text-sm">닉네임</p>
-          <p className="text-white text-lg font-bold">
-            {user?.user_metadata?.full_name || '사용자'}
-          </p>
-        </div>
+    const totalTime = logs.reduce(
+      (sum, item) => sum + (item.actual_minutes || 0),
+      0
+    );
 
-        <div>
-          <p className="text-slate-400 text-sm">이메일</p>
-          <p className="text-white text-lg">
-            {user?.email}
-          </p>
-        </div>
+    setTotalMinutes(totalTime);
 
-        <div>
-          <p className="text-slate-400 text-sm">회원 ID</p>
-          <p className="text-cyan-400 text-sm break-all">
-            {user?.id}
-          </p>
-        </div>
+    const avg =
+      logs.length > 0
+        ? logs.reduce(
+            (sum, item) => sum + (item.satisfaction || 0),
+            0
+          ) / logs.length
+        : 0;
 
-        <div className="flex gap-4 pt-4">
+    setAverageSatisfaction(Number(avg.toFixed(1)));
+  }
+};
 
-          <Link
-            href="/profile/password"
-            className="px-5 py-2 rounded-lg bg-cyan-500 text-white font-semibold"
-          >
-            비밀번호 변경
-          </Link>
+loadProfile();
+```
 
-          <button
-            onClick={handleLogout}
-            className="px-5 py-2 rounded-lg bg-red-500 text-white font-semibold"
-          >
-            로그아웃
-          </button>
+}, []);
 
-        </div>
-      </div>
-    </div>
-  );
-}
+const handleLogout = async () => {
+await supabase.auth.signOut();
+window.location.href = '/';
+};
+
+return ( <div className="max-w-4xl mx-auto py-12 px-6"> <h1 className="text-3xl font-bold mb-8 text-white">
+마이페이지 </h1>
+
+```
+  <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+
+    <div>
+      <p className="text-slate-400 text-sm">닉네임</p>
+      <p className="
+```
